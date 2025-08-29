@@ -1,3 +1,5 @@
+import { registerUser } from '@/actions/register'
+import { FormDataProps } from '@/interfaces/form-data'
 import { Button, Form, Input } from '@heroui/react'
 import React, { FC } from 'react'
 
@@ -6,7 +8,7 @@ interface Props {
 }
 const RegistrationForm: FC<Props> = ({ onClose }) => {
 
-   const [formData, setFormData] = React.useState({
+   const [formData, setFormData] = React.useState<FormDataProps>({
       email: '',
       password: '',
       confirmPassword: '',
@@ -15,6 +17,10 @@ const RegistrationForm: FC<Props> = ({ onClose }) => {
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       console.log('formData :>> ', formData);
+
+      const result = await registerUser(formData)
+
+      onClose()
    }
 
    return (
@@ -40,8 +46,8 @@ const RegistrationForm: FC<Props> = ({ onClose }) => {
                }
                return true
             }}
-            />
-            <Input
+         />
+         <Input
             isRequired
             name='password'
             placeholder='Password'
@@ -61,8 +67,8 @@ const RegistrationForm: FC<Props> = ({ onClose }) => {
                }
                return true
             }}
-            />
-            <Input
+         />
+         <Input
             isRequired
             name='confirmPassword'
             placeholder='Confirm Password'
@@ -82,11 +88,11 @@ const RegistrationForm: FC<Props> = ({ onClose }) => {
                }
                return true
             }}
-            />
-            <div className='w-full flex gap-4 items-center pt-8 justify-end'>
-               <Button variant='light' onPress={onClose}>Cancel</Button>
-               <Button color='primary' type='submit'>Register</Button>
-            </div>
+         />
+         <div className='w-full flex gap-4 items-center pt-8 justify-end'>
+            <Button variant='light' onPress={onClose}>Cancel</Button>
+            <Button color='primary' type='submit'>Register</Button>
+         </div>
       </Form>
    )
 }
