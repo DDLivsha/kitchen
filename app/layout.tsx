@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { HeroUIProvider } from "@heroui/react";
 import Header from "@/components/UI/Header";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth/auth";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -19,20 +21,25 @@ export const metadata: Metadata = {
    description: "Рецепти української кухні",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
    children,
 }: Readonly<{
    children: React.ReactNode;
 }>) {
+
+   const session = await auth()
+
    return (
       <html lang="en">
          <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
          >
-            <HeroUIProvider>
-               <Header />
-               <main className="flex flex-col min-h-[calc(100vh-64px)] w-full justify-start items-center">{children}</main>
-            </HeroUIProvider>
+            <SessionProvider session={session}>
+               <HeroUIProvider>
+                  <Header />
+                  <main className="flex flex-col min-h-[calc(100vh-64px)] w-full justify-start items-center">{children}</main>
+               </HeroUIProvider>
+            </SessionProvider>
          </body>
       </html>
    );
