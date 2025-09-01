@@ -1,3 +1,4 @@
+import { signInWithCredentials } from '@/actions/sign-in'
 import { Button, Form, Input } from '@heroui/react'
 import React, { FC } from 'react'
 
@@ -14,7 +15,10 @@ const LoginForm: FC<Props> = ({ onClose }) => {
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      console.log('formData :>> ', formData);
+
+      await signInWithCredentials(formData.email, formData.password)
+
+      onClose()
    }
 
    return (
@@ -37,8 +41,8 @@ const LoginForm: FC<Props> = ({ onClose }) => {
                }
                return true
             }}
-            />
-            <Input
+         />
+         <Input
             isRequired
             name='password'
             placeholder='Password'
@@ -55,11 +59,11 @@ const LoginForm: FC<Props> = ({ onClose }) => {
                }
                return true
             }}
-            />
-            <div className='w-full flex gap-4 items-center pt-8 justify-end'>
-               <Button variant='light' onPress={onClose}>Cancel</Button>
-               <Button color='primary' type='submit'>Login</Button>
-            </div>
+         />
+         <div className='w-full flex gap-4 items-center pt-8 justify-end'>
+            <Button variant='light' onPress={onClose}>Cancel</Button>
+            <Button color='primary' type='submit'>Login</Button>
+         </div>
       </Form>
    )
 }

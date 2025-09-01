@@ -6,13 +6,23 @@ import { usePathname } from "next/navigation";
 import LoginModal from "./modals/LoginModal";
 import RegistrationModal from "./modals/RegistrationModal";
 import { useState } from "react";
+import { signOutFunc } from "@/actions/sign-out";
+import { useSession } from "next-auth/react";
 
 export default function Header() {
 
    const pathname = usePathname();
 
+   const { data: session, status } = useSession()
+   const isAuth = status === 'authenticated'
+
+
    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+   const handleSignOut = async () => {
+      await signOutFunc()
+   }
 
    return (
       <Navbar className="h-16">
@@ -34,20 +44,32 @@ export default function Header() {
             ))}
          </NavbarContent>
          <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
-               <Button
-                  color="secondary"
-                  onPress={() => setIsLoginModalOpen(true)}
-               >Login</Button>
-            </NavbarItem>
-            <NavbarItem>
-               <Button
-                  color="primary"
-                  onPress={() => setIsRegisterModalOpen(true)}
-               >
-                  Sign Up
-               </Button>
-            </NavbarItem>
+            {isAuth
+               ?
+               <NavbarItem className="hidden lg:flex">
+                  <Button
+                     color="secondary"
+                     onPress={handleSignOut}
+                  >Sign out</Button>
+               </NavbarItem>
+               :
+               <>
+                  <NavbarItem className="hidden lg:flex">
+                     <Button
+                        color="secondary"
+                        onPress={() => setIsLoginModalOpen(true)}
+                     >Login</Button>
+                  </NavbarItem>
+                  <NavbarItem>
+                     <Button
+                        color="primary"
+                        onPress={() => setIsRegisterModalOpen(true)}
+                     >
+                        Sign Up
+                     </Button>
+                  </NavbarItem>
+               </>
+            }
          </NavbarContent>
          <LoginModal
             isOpen={isLoginModalOpen}
