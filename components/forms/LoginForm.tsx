@@ -18,6 +18,8 @@ const LoginForm: FC<Props> = ({ onClose }) => {
 
       await signInWithCredentials(formData.email, formData.password)
 
+      window.location.reload()
+
       onClose()
    }
 

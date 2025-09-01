@@ -5,6 +5,7 @@ import { HeroUIProvider } from "@heroui/react";
 import Header from "@/components/UI/Header";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth/auth";
+import AppLoader from "@/hoc/app-loader";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -36,8 +37,10 @@ export default async function RootLayout({
          >
             <SessionProvider session={session}>
                <HeroUIProvider>
-                  <Header />
-                  <main className="flex flex-col min-h-[calc(100vh-64px)] w-full justify-start items-center">{children}</main>
+                  <AppLoader>
+                     <Header />
+                     <main className="flex flex-col min-h-[calc(100vh-64px)] w-full justify-start items-center">{children}</main>
+                  </AppLoader>
                </HeroUIProvider>
             </SessionProvider>
          </body>
